@@ -1,5 +1,5 @@
 import pytest
-from PyShape import *
+from PyShapes.PyShape import *
 import os.path
 
 def test_get_area():
