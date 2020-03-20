@@ -57,14 +57,19 @@ class PyShape :
         return self.shapes_dict ##returns a dictionary with the frequency of occurance of the shapes
     
     
+    
+    
     ###Shows the shapes with their names and indexes
     def show_shapes(self):
         
         ###text details
-        font = cv2.FONT_HERSHEY_COMPLEX()
+        font = cv2.FONT_HERSHEY_COMPLEX
         fontScale = 0.5
         color = (255,0,0)
-        thickness = 2
+        thickness = 1
+        
+        ###initialize indexes
+        shape_index = {"triangle" : 0, "rectangle" : 0, "pentagon" : 0, "hexagon" : 0, "circle" : 0}
         
         for cnt in self.contours:
             
@@ -78,38 +83,71 @@ class PyShape :
             if(x < 5) :
                 continue
             if(y < 5) :
-                continue
-            ###
-            shape_index = {"triangle" : 0, "rectangle" : 0, "pentagon" : 0, "hexagon" : 0, "circle" : 0}
+                continue            
             
             ###Set a minimum noise filtering area, I guess 400 is good enough
             if(area > 400) :
                 if (len(approx)==3):
                     cv2.drawContours(self.image_read,[approx],0,(0,255,0),5)
-                    self.image_read = cv2.putText(self.image_read, 'triangle'+shape_index["triangle"], (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA)
+                    self.image_read = cv2.putText(self.image_read, 'triangle'+str(shape_index["triangle"]), (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA)
                     shape_index["triangle"] += 1
                 elif (len(approx)==4):
                     cv2.drawContours(self.image_read,[approx],0,(0,0,255),5)
-                    self.image_read = cv2.putText(self.image_read, 'rectangle'+shape_index["rectangle"], (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA) 
+                    self.image_read = cv2.putText(self.image_read, 'rectangle'+str(shape_index["rectangle"]), (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA) 
                     shape_index["rectangle"] += 1
                 elif (len(approx)==5):
-                    cv2.drawContours(self.image_read,[approx],0,(255,255,255),5)
-                    self.image_read = cv2.putText(self.image_read, 'pentagon'+shape_index["pentagon"], (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA) 
+                    cv2.drawContours(self.image_read,[approx],0,(0,255,255),5)
+                    self.image_read = cv2.putText(self.image_read, 'pentagon'+str(shape_index["pentagon"]), (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA) 
                     shape_index["pentagon"] += 1
                 elif (len(approx)==6):
                     cv2.drawContours(self.image_read,[approx],0,(255,0,0),5)                    
-                    self.image_read = cv2.putText(self.image_read, 'hexagon'+shape_index["hexagon"], (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA) 
+                    self.image_read = cv2.putText(self.image_read, 'hexagon'+str(shape_index["hexagon"]), (x,y), font, fontScale, color, thickness, cv2.LINE_AA) #image = cv2.putText(image, 'OpenCV', org, font,  fontScale, color, thickness, cv2.LINE_AA) 
                     shape_index["hexagon"] += 1
-            
-            cv2.imshow("Image with indexes", self.image_read)
-            cv2.waitKey(0)
+            ###Loop ends
+                    
+        cv2.imshow("Image with indexes", self.image_read)
+        cv2.waitKey(0)
             
         
             
             
     ###Returns a dictionary of the coordinates of the corners of the shape with the given name and index
-    #def get_corners(name, index): 
-
+    def get_corners(self, name, index): 
+        ##Pre-requisites for names and index detection
+        flag = False
+        shapes_name_to_number = {"triangle" : 3, "rectangle" : 4, "pentagon" : 5, "hexagon" : 6, "circle" : -1}
+        shapes_index = {"triangle" : 0, "rectangle" : 0, "pentagon" : 0, "hexagon" : 0, "circle" : 0}
+        
+        for cnt in self.contours:
+            
+            approximate_corners = cv2.approxPolyDP(cnt,0.03*cv2.arcLength(cnt,True),True)
+            ##Get starting coordinates
+            x = approximate_corners.ravel()[0]
+            y = approximate_corners.ravel()[1]
+            area = cv2.contourArea(approximate_corners)
+            
+            ###Exclude the outer boundary
+            if(x < 5) :
+                continue
+            if(y < 5) :
+                continue
+                       
+            ###Set a minimum noise filtering area, I guess 400 is good enough
+            if(area > 400) :
+                if (len(approximate_corners)==shapes_name_to_number[name]):
+                    if(shapes_index[name] == index):
+                        flag = True
+                        return approximate_corners 
+                        ### A numpy array containing the coordinates of the corners
+                        ### where approximate_corner[n] denotes the (n+1)th corner coordinate
+                    else:
+                        shapes_index[name] += 1
+        if(flag == False):
+            return None ###If shape and index are not found : return None
+        
+        
+        
+        
     ###Returns the area of the shape with a particular name and index
     #def get_area(name, index):
     
