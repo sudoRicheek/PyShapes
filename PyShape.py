@@ -149,8 +149,39 @@ class PyShape :
         
         
     ###Returns the area of the shape with a particular name and index
-    #def get_area(name, index):
-    
+    def get_area(self, name, index):
+        ##Pre-requisites for names and index detection
+        flag = False
+        shapes_name_to_number = {"triangle" : 3, "rectangle" : 4, "pentagon" : 5, "hexagon" : 6, "circle" : -1}
+        shapes_index = {"triangle" : 0, "rectangle" : 0, "pentagon" : 0, "hexagon" : 0, "circle" : 0}
+        
+        for cnt in self.contours:
+            
+            approximate_corners = cv2.approxPolyDP(cnt,0.03*cv2.arcLength(cnt,True),True)
+            ##Get starting coordinates
+            x = approximate_corners.ravel()[0]
+            y = approximate_corners.ravel()[1]
+            area_of_shape = cv2.contourArea(approximate_corners)
+            
+            ###Exclude the outer boundary
+            if(x < 5) :
+                continue
+            if(y < 5) :
+                continue
+                       
+            ###Set a minimum noise filtering area, I guess 400 is good enough
+            if(area_of_shape > 400) :
+                if (len(approximate_corners)==shapes_name_to_number[name]):
+                    if(shapes_index[name] == index):
+                        flag = True
+                        return area_of_shape
+                        ### Returns the area of the shape(identified by name and index)
+                    else:
+                        shapes_index[name] += 1
+        if(flag == False):
+            return -1 ###If shape and index are not found : return -1
+        
+        
     ###Also implement Hough circles for detecting circles
 
     def close(self):
