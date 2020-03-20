@@ -13,7 +13,7 @@ Installation is very simple through pip
 For pip
 
 ```
-pip install PyShape
+pip install PyShapes
 ```
 
 ### Usage
