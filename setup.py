@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="PyShapes", # Replace with your own username
-    version="1.1.1",
+    version="1.1.3",
     author="Richeek Das",
     author_email="richeekdas2001@gmail.com",
     description="A shape detection module for Python",
