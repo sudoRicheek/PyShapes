@@ -18,13 +18,13 @@ pip install PyShapes
 
 ### Usage
 
-Importing the package (Note : ***You must import from PyShape not PyShapes***)
+Importing the package
 
 ```
-from PyShape import *
+from PyShapes import *
 ```
 
-Creating **PyShape** objects -
+Creating **PyShape** objects(Note : **Object creation must be on PyShape class !**)
 
 ```
 shapes = PyShape("C:\\path\\to\\image")
@@ -67,6 +67,14 @@ Useful functions in **PyShape** -
   *Returns the area of a particular shape in pixel<sup>2* *units; return type :* **double**
 
   *Returns* **-1** *if there is no shape with that name/index*
+  
+* Finally, don't forget to close the running object !
+  
+  ```
+  shapes.close()
+  ```
+  
+  *Closes the object and the binded dependencies*
 
 ### About
 
