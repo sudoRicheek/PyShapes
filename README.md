@@ -16,6 +16,12 @@ For pip
 pip install PyShapes
 ```
 
+For pip3
+
+```
+pip3 install PyShapes
+```
+
 ### Usage
 
 Importing the package
