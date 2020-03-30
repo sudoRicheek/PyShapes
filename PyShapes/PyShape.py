@@ -1,3 +1,5 @@
+import os
+import errno
 import cv2
 import numpy as np
 
@@ -10,6 +12,11 @@ class PyShape :
         self.shapes_dict = {"triangle" : 0, "rectangle" : 0, "pentagon" : 0, "hexagon" : 0, "circle" : 0}
         ##Read the image
         self.image_read = cv2.imread(self.image_path)
+
+        if self.image_read is None:
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), self.image_path)
+        ##Raises error in case user supplies a wrong file path
+
         self.image_show = self.image_read.copy()
         ##Turn it gray for thresholding
         self.gray = cv2.cvtColor(self.image_show, cv2.COLOR_BGR2GRAY)
@@ -32,9 +39,9 @@ class PyShape :
             area = cv2.contourArea(approx)
 
             ###Exclude the outer boundary
-            if(x < 5) :
+            if(x == 0) :
                 continue
-            if(y < 5) :
+            if(y == 0) :
                 continue
             ###
 
