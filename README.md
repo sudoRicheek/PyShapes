@@ -1,6 +1,9 @@
 # PyShapes:A Shape detection module for Python
 
 [![Build Status](https://travis-ci.org/sudoRicheek/PyShapes.svg?branch=master)](https://travis-ci.org/sudoRicheek/PyShapes)
+[![Pypi](http://img.shields.io/pypi/v/PyShapes.svg?style=flat-square)](https://pypi.org/project/PyShapes/)
+[![License](https://img.shields.io/pypi/l/PyShapes.svg?style=flat-square)](https://pypi.org/project/PyShapes/)
+[![Downloads](https://img.shields.io/pypi/dm/PyShapes.svg?style=flat-square)](https://pypi.org/project/PyShapes/)
 
 **PyShapes** is a python package that allows to detect and extract the basic shapes(polygons and circles) present in an image. It also has some in-built attributes and functions to get basic information and perform basic operations on those shapes.
 
